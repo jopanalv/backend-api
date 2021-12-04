@@ -25,6 +25,16 @@ class User extends Authenticatable
         'handphone',
         'role'
     ];
+    
+    /**
+     * The products that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'carts');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
