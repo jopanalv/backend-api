@@ -100,6 +100,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Product::destroy($id);
+        return response([
+            'message' => 'Delete product success'
+        ], 202);
     }
 }
