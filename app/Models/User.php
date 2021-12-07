@@ -27,13 +27,13 @@ class User extends Authenticatable
     ];
     
     /**
-     * The products that belong to the User
+     * Get the cart associated with the User
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function products()
+    public function cart(): HasOne
     {
-        return $this->belongsToMany(Product::class, 'carts');
+        return $this->hasOne(Cart::class, 'user_id', 'id');
     }
 
     /**

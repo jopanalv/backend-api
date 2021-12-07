@@ -18,17 +18,15 @@ class Product extends Model
         'specification',
         'function',
         'utility',
-        'type',
         'commodity'
     ];
-
     /**
-     * The users that belong to the Product
+     * Get all of the cart for the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
+    public function cart(): HasMany
     {
-        return $this->belongsToMany(User::class, 'carts');
+        return $this->hasMany(Cart::class, 'product_id', 'id');
     }
 }
