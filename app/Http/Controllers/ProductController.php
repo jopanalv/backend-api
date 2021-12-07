@@ -34,8 +34,8 @@ class ProductController extends Controller
         $validate = $request->validate([
             'name' => 'required|string',
             'slug' => 'required|string',
-            'image' => 'required|string',
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            // 'image' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
             'price' => 'required|integer',
             'stock' => 'required|integer',
             'specification' => 'required|string',
@@ -44,14 +44,14 @@ class ProductController extends Controller
             'commodity' => 'required|string'
         ]);
 
-        // $image = $request->file('image');
-        // $image->storeAs('public/images/',$image->hashName());
+        $image = $request->file('image');
+        $image->storeAs('public/images/',$image->hashName());
 
         $product = Product::create([
             'name' => $validate['name'],
             'slug' => $validate['slug'],
-            'image' => $validate['image'],
-            // 'image' => $image->hashName(),
+            // 'image' => $validate['image'],
+            'image' => $image->hashName(),
             'price' => $validate['price'],
             'stock' => $validate['stock'],
             'specification' => $validate['specification'],
