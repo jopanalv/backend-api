@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -49,7 +50,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'name' => $validate['name'],
-            'slug' => $validate['slug'],
+            'slug' => Str::slug($validate['name'], '-'),
             // 'image' => $validate['image'],
             'image' => $image->hashName(),
             'price' => $validate['price'],
@@ -75,9 +76,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $product = Product::where('slug', $slug)->first();
+        return response([
+            'message' => 'get data successful',
+            'data' => $product
+        ],200);
     }
 
     /**
@@ -89,7 +94,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->update($request->all());
+
+        return response([
+            'message' => 'update successful',
+            'data' => $product
+        ],200);
     }
 
     /**
@@ -104,5 +115,20 @@ class ProductController extends Controller
         return response([
             'message' => 'Delete product success'
         ], 202);
+    }
+
+    /**
+     * Search the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
+    {
+        $product = Product::where('name', 'like', '%'.$name.'%')->get();
+        return response([
+            'message' => 'search successful',
+            'data' => $product
+        ],200);
     }
 }
