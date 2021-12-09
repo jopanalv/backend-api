@@ -21,10 +21,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/list', [ProductController::class, 'index']);
-Route::post('/addproduct', [ProductController::class, 'store']);
-Route::delete('/delete/{id}', [ProductController::class, 'destroy']);
+Route::get('/search/{name}', [ProductController::class, 'search']);
+Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::post('/addproduct', [ProductController::class, 'store']);
+    Route::post('/product/edit/{id}', [ProductController::class, 'update']);
+    Route::delete('/delete/{id}', [ProductController::class, 'destroy']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
