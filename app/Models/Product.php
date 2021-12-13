@@ -25,8 +25,8 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function cart(): HasMany
+    public function cart()
     {
-        return $this->hasMany(Cart::class, 'product_id', 'id');
+        return $this->hasMany(Cart::class);
     }
 }

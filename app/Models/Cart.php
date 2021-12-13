@@ -22,9 +22,9 @@ class Cart extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -32,7 +32,7 @@ class Cart extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function product(): BelongsToMany
+    public function product()
     {
         return $this->belongsToMany(Product::class);
     }

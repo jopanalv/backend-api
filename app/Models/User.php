@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'fullname',
         'email',
         'password',
         'address',
@@ -31,9 +31,9 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function cart(): HasOne
+    public function cart()
     {
-        return $this->hasOne(Cart::class, 'user_id', 'id');
+        return $this->hasOne(Cart::class);
     }
 
     /**
