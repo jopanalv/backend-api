@@ -87,4 +87,12 @@ class AuthController extends Controller
             'data' => $listUser
         ],200);
     }
+
+    public function destroy($id)
+    {
+        User::destroy($id);
+        return response([
+            'message' => 'Delete User success'
+        ], 202);
+    }
 }
