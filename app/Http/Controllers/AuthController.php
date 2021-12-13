@@ -34,7 +34,8 @@ class AuthController extends Controller
         $response = [
             'message' => 'Register Successfull',
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'token_type' => 'Bearer'
         ];
 
         return response($response, 201);
@@ -65,7 +66,8 @@ class AuthController extends Controller
         $response = [
             'message' => 'Login Successful',
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'token_type' => 'Bearer'
         ];
 
         return response($response, 200);
