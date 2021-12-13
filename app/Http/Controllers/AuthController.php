@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,7 +12,7 @@ class AuthController extends Controller
 {
     public function register(Request $request) {
         $validate = $request->validate([
-            'name' => 'required|string|max:50',
+            'fullname' => 'required|string|max:50',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string',
             'address' => 'required|string|max:255',
@@ -20,7 +21,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $validate['name'],
+            'fullname' => $validate['fullname'],
             'email' => $validate['email'],
             'password' => bcrypt($validate['password']),
             'address' => $validate['address'],
@@ -40,6 +41,12 @@ class AuthController extends Controller
     }
 
     public function login(Request $request) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Invalid login details'
+            ], 401);
+        }
+
         $validate = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
@@ -70,5 +77,14 @@ class AuthController extends Controller
         return [
             'message' => 'Logout Successful'
         ];
+    }
+
+    public function listUser(){
+        $listUser = User::all();
+
+        return response([
+            'message' => 'list success',
+            'data' => $listUser
+        ],200);
     }
 }
