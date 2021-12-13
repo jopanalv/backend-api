@@ -20,7 +20,7 @@ class CartController extends Controller
         $carts = DB::table('carts')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
-        ->select('users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total')
+        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total')
         ->get();
 
         $response = [
@@ -64,9 +64,20 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user_id)
     {
-        //
+        $carts = DB::table('carts')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->where('user_id', $user_id)
+        ->select('users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total')
+        ->get();
+
+        $response = [
+            'message' => 'cart success',
+            'data' => $carts
+        ];
+        return response($response, 200);        
     }
 
     /**
