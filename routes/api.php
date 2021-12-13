@@ -32,7 +32,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::post('/cart/add', [CartController::class, 'store']);
     Route::get('/cart/list', [CartController::class, 'index']);
-    Route::get('/cart/{id}', [CartController::class, 'show']);
+    Route::get('/cart/{user_id}', [CartController::class, 'show']);
+    Route::delete('/cart/delete/{id}', [CartController::class, 'destroy']);
 
     Route::get('/user/list', [AuthController::class, 'listUser']);
     Route::post('/user/logout', [AuthController::class, 'logout']);
