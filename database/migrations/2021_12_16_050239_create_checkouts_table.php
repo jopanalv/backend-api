@@ -14,11 +14,13 @@ class CreateCheckoutsTable extends Migration
     public function up()
     {
         Schema::create('checkouts', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('cart_id')->unsigned();
             $table->string('proof');
-            $table->string('status', ['waiting', 'process', 'success', 'failed']);
+            $table->enum('status', ['waiting', 'process', 'success', 'failed']);
             $table->timestamps();
+
+            $table->foreign('cart_id')->references('id')->on('carts');
         });
     }
 
