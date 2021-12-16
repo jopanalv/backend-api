@@ -17,7 +17,7 @@ class CreateCheckoutsTable extends Migration
             $table->id();
             $table->integer('cart_id')->unsigned();
             $table->string('proof');
-            $table->string('status', ['waiting', 'proses', 'success', 'failed']);
+            $table->string('status', ['waiting', 'process', 'success', 'failed']);
             $table->timestamps();
         });
     }
