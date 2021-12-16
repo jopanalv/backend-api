@@ -20,7 +20,7 @@ class CartController extends Controller
         $carts = DB::table('carts')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
-        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total')
+        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'carts.created_at')
         ->get();
 
         $response = [
