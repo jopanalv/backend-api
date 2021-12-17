@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/cart/list', [CartController::class, 'index']);
     Route::get('/cart/{user_id}', [CartController::class, 'show']);
     Route::delete('/cart/delete/{id}', [CartController::class, 'destroy']);
+
+    Route::get('/checkout/list', [CheckoutController::class, 'index']);
+    Route::post('/checkout/add', [CheckoutController::class, 'store']);
+    Route::delete('/checkout/delete/{id}', [CheckoutController::class, 'destroy']);
 
     Route::get('/user/list', [AuthController::class, 'listUser']);
     Route::post('/user/logout', [AuthController::class, 'logout']);
