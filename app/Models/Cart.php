@@ -36,4 +36,13 @@ class Cart extends Model
     {
         return $this->belongsToMany(Product::class);
     }
+    /**
+     * Get all of the checkout for the Cart
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function checkout()
+    {
+        return $this->hasOne(Checkout::class);
+    }
 }
