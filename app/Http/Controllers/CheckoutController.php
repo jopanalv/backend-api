@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Checkout;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -13,7 +16,12 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        //
+        $checkouts = Checkout::all();
+        $response= [
+            "message" => "get all checkout success",
+            "data" => $checkouts
+        ];
+        return response($response,200);
     }
 
     /**
@@ -24,7 +32,27 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'cart_id' => 'required|integer',
+            'status' => 'required|string',
+            'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096'
+        ]);
+
+        $image = $request->file('proof');
+        $image->storeAs('public/images/',$image->hashName());
+
+        $checkout = Checkout::create([
+            'cart_id' => $validate['cart_id'],
+            'proof' => $image->hashName(),
+            'status' => $validate['status'],
+        ]);
+
+        $response = [
+            'message' => 'Create checkout Successful',
+            'data' => $checkout,
+        ];
+
+        return response($response, 201);
     }
 
     /**
@@ -58,6 +86,9 @@ class CheckoutController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Checkout::destroy($id);
+        return response([
+            'message' => 'Delete checkout success'
+        ], 202);
     }
 }
