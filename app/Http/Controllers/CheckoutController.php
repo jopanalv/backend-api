@@ -22,7 +22,7 @@ class CheckoutController extends Controller
         ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
-        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
         
         $response= [
@@ -81,7 +81,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('carts.user_id', $id)
-        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->first();
         // $checkouts = Checkout::all();
         $response= [
@@ -126,7 +126,7 @@ class CheckoutController extends Controller
      */
     public function confirm(Request $request, $id)
     {
-        $checkout = Checkout::find($id);
+        $checkout = Checkout::find($id)->first();
         $checkout->update(['status' => 'success']);
 
         return response([
@@ -144,10 +144,10 @@ class CheckoutController extends Controller
      */
     public function cancel(Request $request, $id)
     {
-        $checkout = Checkout::find($id);
+        $checkout = Checkout::find($id)->first();
         $checkout->update(['status' => 'failed']);
 
-        $cart = Cart::where('id', $request->cart_id)->first();
+        $cart = Cart::where('id', $checkout->cart_id)->first();
         $product = Product::where('id', $cart->product_id)->first();
         
         $product->update(['stock' => ($product->stock + 1)]);
@@ -156,5 +156,69 @@ class CheckoutController extends Controller
             'message' => 'failed successful',
             'data' => $checkout
         ],200);
+    }
+
+    public function getSuccess(){
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->where('checkouts.status', 'success')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->get();
+
+        $response= [
+            "message" => "get success checkout successful",
+            "data" => $checkouts
+        ];
+        return response($response,200);
+    }
+
+    public function getProcess(){
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->where('checkouts.status', 'process')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->get();
+
+        $response= [
+            "message" => "get process checkout successful",
+            "data" => $checkouts
+        ];
+        return response($response,200);
+    }
+
+    public function getFailed(){
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->where('checkouts.status', 'failed')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->get();
+
+        $response= [
+            "message" => "get failed checkout successful",
+            "data" => $checkouts
+        ];
+        return response($response,200);
+    }
+
+    public function getWaiting(){
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->where('checkouts.status', 'waiting')
+        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->get();
+
+        $response= [
+            "message" => "get waiting checkout successful",
+            "data" => $checkouts
+        ];
+        return response($response,200);
     }
 }
