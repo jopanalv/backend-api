@@ -38,7 +38,13 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::get('/checkout/list', [CheckoutController::class, 'index']);
     Route::get('/checkout/{id}', [CheckoutController::class, 'show']);
+    Route::get('/checkout/status/success', [CheckoutController::class, 'getSuccess']);
+    Route::get('/checkout/status/waiting', [CheckoutController::class, 'getWaiting']);
+    Route::get('/checkout/status/process', [CheckoutController::class, 'getProcess']);
+    Route::get('/checkout/status/failed', [CheckoutController::class, 'getFailed']);
     Route::post('/checkout/add', [CheckoutController::class, 'store']);
+    Route::post('/checkout/confirm/{id}', [CheckoutController::class, 'confirm']);
+    Route::post('/checkout/cancel/{id}', [CheckoutController::class, 'cancel']);
     Route::delete('/checkout/delete/{id}', [CheckoutController::class, 'destroy']);
 
     Route::get('/user/list', [AuthController::class, 'listUser']);
