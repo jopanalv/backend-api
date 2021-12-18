@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Checkout;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,13 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        $checkouts = Checkout::all();
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->get();
+        
         $response= [
             "message" => "get all checkout success",
             "data" => $checkouts
@@ -35,8 +43,13 @@ class CheckoutController extends Controller
         $validate = $request->validate([
             'cart_id' => 'required|integer',
             'status' => 'required|string',
-            'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096'
+            'proof' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096'
         ]);
+
+        $cart = Cart::where('id', $request->cart_id)->first();
+        $product = Product::where('id', $cart->product_id)->first();
+        
+        $product->update(['stock' => ($product->stock - 1)]);
 
         $image = $request->file('proof');
         $image->storeAs('public/images/',$image->hashName());
@@ -63,7 +76,19 @@ class CheckoutController extends Controller
      */
     public function show($id)
     {
-        //
+        $checkouts = DB::table('checkouts')
+        ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
+        ->join('products', 'carts.product_id', '=', 'products.id')
+        ->join('users', 'carts.user_id', '=', 'users.id')
+        ->where('carts.user_id', $id)
+        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->first();
+        // $checkouts = Checkout::all();
+        $response= [
+            "message" => "get checkout success",
+            "data" => $checkouts
+        ];
+        return response($response,200);
     }
 
     /**
@@ -90,5 +115,46 @@ class CheckoutController extends Controller
         return response([
             'message' => 'Delete checkout success'
         ], 202);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm(Request $request, $id)
+    {
+        $checkout = Checkout::find($id);
+        $checkout->update(['status' => 'success']);
+
+        return response([
+            'message' => 'confirm successful',
+            'data' => $checkout
+        ],200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel(Request $request, $id)
+    {
+        $checkout = Checkout::find($id);
+        $checkout->update(['status' => 'failed']);
+
+        $cart = Cart::where('id', $request->cart_id)->first();
+        $product = Product::where('id', $cart->product_id)->first();
+        
+        $product->update(['stock' => ($product->stock + 1)]);
+
+        return response([
+            'message' => 'failed successful',
+            'data' => $checkout
+        ],200);
     }
 }
