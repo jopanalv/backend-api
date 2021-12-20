@@ -22,7 +22,7 @@ class CheckoutController extends Controller
         ->join('carts', 'checkouts.cart_id', '=', 'carts.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
         
         $response= [
@@ -81,7 +81,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('carts.user_id', $id)
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->first();
         // $checkouts = Checkout::all();
         $response= [
@@ -164,7 +164,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('checkouts.status', 'success')
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image',  'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
 
         $response= [
@@ -180,7 +180,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('checkouts.status', 'process')
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
 
         $response= [
@@ -196,7 +196,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('checkouts.status', 'failed')
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
 
         $response= [
@@ -212,7 +212,7 @@ class CheckoutController extends Controller
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->where('checkouts.status', 'waiting')
-        ->select('checkouts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
+        ->select('checkouts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'checkouts.proof', 'checkouts.status', 'carts.created_at')
         ->get();
 
         $response= [
