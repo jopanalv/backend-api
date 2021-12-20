@@ -20,7 +20,7 @@ class CartController extends Controller
         $carts = DB::table('carts')
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
-        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'carts.created_at')
+        ->select('carts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'carts.created_at')
         ->get();
 
         $response = [
@@ -70,7 +70,7 @@ class CartController extends Controller
         ->join('users', 'carts.user_id', '=', 'users.id')
         ->join('products', 'carts.product_id', '=', 'products.id')
         ->where('user_id', $user_id)
-        ->select('carts.id', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'carts.created_at')
+        ->select('carts.id', 'products.image', 'users.fullname', 'products.name', 'carts.quantity', 'carts.duration', 'carts.total', 'carts.created_at')
         ->get();
 
         $response = [
