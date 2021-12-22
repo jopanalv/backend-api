@@ -124,9 +124,9 @@ class CheckoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm(Request $request, $id)
+    public function confirm($id)
     {
-        $checkout = Checkout::find($id)->first();
+        $checkout = Checkout::where('id', $id)->first();
         $checkout->update(['status' => 'success']);
 
         return response([
@@ -142,9 +142,9 @@ class CheckoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cancel(Request $request, $id)
+    public function cancel($id)
     {
-        $checkout = Checkout::find($id)->first();
+        $checkout = Checkout::where('id', $id)->first();
         $checkout->update(['status' => 'failed']);
 
         $cart = Cart::where('id', $checkout->cart_id)->first();
